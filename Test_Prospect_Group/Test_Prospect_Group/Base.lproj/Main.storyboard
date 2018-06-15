@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="4jJ-Bf-qsB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="4jJ-Bf-qsB">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -27,7 +27,7 @@
             </objects>
             <point key="canvasLocation" x="-714" y="167"/>
         </scene>
-        <!--PhotosVC-->
+        <!--Main-->
         <scene sceneID="Tzw-CC-v4D">
             <objects>
                 <viewController id="KrO-Zi-Ylk" customClass="PhotosVC" customModule="Test_Prospect_Group" customModuleProvider="target" sceneMemberID="viewController">
@@ -39,7 +39,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="PhotosCell" rowHeight="166" id="FES-Hl-tzG">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="PhotosCell" rowHeight="166" id="FES-Hl-tzG" customClass="PhotoTableViewCell" customModule="Test_Prospect_Group" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="166"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="FES-Hl-tzG" id="3ML-7U-b91">
@@ -55,14 +55,14 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ID:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p6R-X2-c3p">
-                                                    <rect key="frame" x="182" y="90" width="185" height="20"/>
+                                                    <rect key="frame" x="182" y="89.5" width="185" height="20"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AlbumID:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YHm-JN-YYi">
-                                                    <rect key="frame" x="182" y="53" width="185" height="21"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                                    <rect key="frame" x="182" y="53.5" width="185" height="20"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -82,10 +82,17 @@
                                             <constraint firstItem="ODV-TS-ZGe" firstAttribute="top" secondItem="FES-Hl-tzG" secondAttribute="top" constant="8" id="euI-4q-f6o"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="hintTitle" destination="YHm-JN-YYi" id="O2I-qd-qWK"/>
+                                            <outlet property="mainTitle" destination="p6R-X2-c3p" id="Hxz-le-dfD"/>
+                                            <outlet property="thumbnailImage" destination="ODV-TS-ZGe" id="dE7-wv-Eg3"/>
                                             <segue destination="67q-Ge-Fkd" kind="show" id="wGA-TR-Mfu"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="KrO-Zi-Ylk" id="LdW-cN-vQz"/>
+                                    <outlet property="delegate" destination="KrO-Zi-Ylk" id="5mZ-ad-lR8"/>
+                                </connections>
                             </tableView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nc3-Hm-dTc">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
@@ -119,7 +126,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Y5o-DL-ZFn"/>
                     </view>
-                    <navigationItem key="navigationItem" id="obc-Q8-WMT"/>
+                    <navigationItem key="navigationItem" title="Main" id="obc-Q8-WMT"/>
                     <connections>
                         <outlet property="errorLabel" destination="KZb-Qo-XU0" id="W7r-IZ-3CM"/>
                         <outlet property="errorView" destination="nc3-Hm-dTc" id="E5Q-Vg-m9u"/>
@@ -130,21 +137,21 @@
             </objects>
             <point key="canvasLocation" x="14" y="167"/>
         </scene>
-        <!--PhotoVC-->
+        <!--Photo-->
         <scene sceneID="3o5-F8-oYb">
             <objects>
-                <viewController id="67q-Ge-Fkd" customClass="PhotoVC" customModule="Test_Prospect_Group" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Photo" id="67q-Ge-Fkd" customClass="PhotoVC" customModule="Test_Prospect_Group" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xgF-Ka-e6g">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="CSn-re-KnM">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="CSn-re-KnM">
                                 <rect key="frame" x="16" y="80" width="343" height="343"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="CSn-re-KnM" secondAttribute="height" multiplier="1:1" id="SSB-vb-DxG"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Image title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kMv-0Y-WgU">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Image title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kMv-0Y-WgU">
                                 <rect key="frame" x="148" y="439" width="79.5" height="20"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -166,8 +173,8 @@
                         <viewLayoutGuide key="safeArea" id="Jd6-Fk-MpC"/>
                     </view>
                     <connections>
-                        <outlet property="image" destination="CSn-re-KnM" id="btL-6b-JQn"/>
                         <outlet property="imageTitle" destination="kMv-0Y-WgU" id="eiQ-6E-Iby"/>
+                        <outlet property="imageView" destination="CSn-re-KnM" id="AXk-kr-csp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sYA-pw-v9P" userLabel="First Responder" sceneMemberID="firstResponder"/>

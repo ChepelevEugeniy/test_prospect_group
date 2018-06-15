@@ -7,62 +7,87 @@
 //
 
 import UIKit
-import Alamofire
 
 class PhotosVC: UIViewController {
     
     //MARK: - Variables
+    
+    fileprivate struct Constants {
+        static let tableRowHeight: CGFloat = 166
+    }
     
     @IBOutlet fileprivate weak var tableView: UITableView!
     
     @IBOutlet fileprivate weak var errorView: UIView!
     @IBOutlet fileprivate weak var errorLabel: UILabel!
     
-    let photos: [Photo] = []
+    fileprivate var photos: [Photo] = []
+    
+    private lazy var modelManager: ModelManager = { [weak self] in
+        let manager = ModelManager()
+        manager.delegate = self
+        return manager
+        }()
     
     //MARK: - UIViewController lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = Constants.tableRowHeight
         errorView.isHidden = false
         
-        loadData()
+        modelManager.loadData()
     }
     
-    //MARK: - Functionality
+    //MARK: - Logic
     
-    private func loadData() {
-        let photosEndpoint: String = "https://jsonplaceholder.typicode.com/photos"
-        Alamofire.request(photosEndpoint)
-            .responseJSON { response in
-                // check for errors
-                guard response.result.error == nil else {
-                    // got an error in getting the data, need to handle it
-                    print("error calling GET on /todos/1")
-                    print(response.result.error!)
-                    return
-                }
-                
-                // make sure we got some JSON since that's what we expect
-                guard let json = response.result.value as? [[String: Any]] else {
-                    print("didn't get todo object as JSON from API")
-                    if let error = response.result.error {
-                        print("Error: \(error)")
-                    }
-                    return
-                }
-                
-                // get and print the title
-                guard let todoTitle = json[0]["title"] as? String else {
-                    print("Could not get todo title from JSON")
-                    return
-                }
-                print("The title is: " + todoTitle)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let selectedIndex = tableView.indexPathForSelectedRow?.row
+        if let photoVC = segue.destination as? PhotoVC, let index = selectedIndex {
+            photoVC.model = photos[index]
         }
     }
+    
+    fileprivate func startFlashing() {
+        UIView.animate(withDuration: 1.0, delay: 0, options: [.repeat, .autoreverse, .beginFromCurrentState], animations: {
+            self.errorLabel.alpha = 0.0
+        }, completion: nil)
+    }
+    
+    fileprivate func stopFlashing() {
+        view.layer.removeAllAnimations()
+    }
 }
+
+//MARK: - ModelManagerDelegate
+
+extension PhotosVC: ModelManagerDelegate {
+    
+    func reloadView(with models: [Photo]) {
+        self.errorView.isHidden = true
+        self.photos = models.sorted { $0.id < $1.id }
+        self.tableView.reloadData()
+        
+        stopFlashing()
+    }
+    
+    func reloadView(with error: Error) {
+        self.errorView.isHidden = false
+        self.errorLabel.text = error.localizedDescription
+        
+        stopFlashing()
+    }
+    
+    func loadingState() {
+        errorView.isHidden = false
+        errorLabel.text = "Loading..."
+        
+        self.startFlashing()
+    }
+}
+
+//MARK: - TableView delegate and datasource
 
 extension PhotosVC: UITableViewDataSource, UITableViewDelegate {
     
@@ -75,18 +100,10 @@ extension PhotosVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let photosCell = tableView.dequeueReusableCell(withIdentifier: "PhotosCell", for: indexPath)
+        let photosCell: PhotoTableViewCell = tableView.dequeueReusableCell(withIdentifier: "PhotosCell", for: indexPath) as! PhotoTableViewCell
+        
+        photosCell.update(with: photos[indexPath.row])
+        
         return photosCell
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("select")
-    }
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        super.prepare(for: segue, sender: sender)
-//
-//        guard let photoVC = segue.destination as? PhotoVC else { return }
-//
-//        photoVC.model = photos
-//    }
 }
